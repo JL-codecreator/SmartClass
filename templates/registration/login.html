@@ -1,0 +1,62 @@
+{% extends 'registration/registration_base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'SmartClass Insights - Login' %}{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 12px;">
+    <div class="card-body text-center">
+      <h3 class="mb-4 text-primary"><i class="fas fa-user-lock me-2"></i>{% trans 'Sign In' %}</h3>
+      <form action="" method="POST" id="login-form" class="needs-validation" novalidate>{% csrf_token %}
+        <div class="mb-3 text-start">
+          <label for="username_id" class="form-label"><i class="fas fa-user me-2"></i>{% trans 'ID Number' %}</label>
+          <input type="text" name="username" id="username_id" class="form-control" required>
+          <div id="message-wrapper" class="small mt-1"></div>
+        </div>
+        <div class="mb-3 text-start">
+          <label for="password_id" class="form-label"><i class="fas fa-lock me-2"></i>{% trans 'Password' %}</label>
+          <input type="password" name="password" id="password_id" class="form-control" required>
+        </div>
+        {% if form.errors %}
+          <div class="alert alert-danger p-2" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {% trans 'Invalid ID & Password.' %}
+          </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary w-100" id="login-btn">
+          <i class="fas fa-sign-in-alt"></i> {% trans 'SIGN IN' %}
+        </button>
+      </form>
+      <div class="mt-3">
+        <a href="{% url 'password_reset' %}" class="text-decoration-none text-primary">{% trans 'Forgot password?' %}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script>
+  $('#login-form').submit(function () {
+    $('#login-btn').addClass('disabled');
+    $('#login-btn').html(`<i class="fas fa-spinner fa-spin"></i> Signing you in...`);
+  });
+
+  $("#username_id").on("input", function () {
+    let username = $(this).val();
+    $.ajax({
+      url: "/accounts/ajax/validate-username/",
+      data: { username: username },
+      dataType: 'json',
+      success: function (data) {
+        if (data.is_taken) {
+          $('#message-wrapper').html(`<span class="text-danger"><b>${username}</b> is already taken.</span>`);
+        } else {
+          $('#message-wrapper').html(`<span class="text-success"><b>${username}</b> is available.</span>`);
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

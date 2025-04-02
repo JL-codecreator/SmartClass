@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} {% trans 'Dashboard' %} | {% trans 'SmartClass Insights' %} {% endblock title %}
+{% load static %}
+
+{% block header %}
+<!-- Load Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans 'Dashboard' %}</li>
+    </ol>
+</nav>
+
+{% include 'snippets/messages.html' %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="title-1">{% trans 'Dashboard' %}</h1>
+</div>
+
+<!-- Row for Charts -->
+<!-- Row for Charts -->
+<div class="row px-3">
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5 class="text-center">{% trans 'User Distribution (Bar Chart)' %}</h5>
+            <canvas id="userBarChart"></canvas>
+        </div>
+
+        <!-- Latest Activities Section placed right below -->
+        <div class="card p-3 mt-3">
+            <h5>{% trans 'Latest activities' %}</h5>
+            <ul class="ps-2 small">
+                {% for log in logs %}
+                    <li>{{ log.message }} <span class="text-muted">- {{ log.created_at }}</span></li>
+                {% empty %}
+                    <li>{% trans 'No recent activity' %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card p-3">
+            <h5 class="text-center">{% trans 'User Proportion (Doughnut Chart)' %}</h5>
+            <canvas id="userDoughnutChart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- JavaScript for Chart.js -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Data for the charts
+        const userCounts = {
+            students: {{ student_count }},
+            lecturers: {{ lecturer_count }},
+            admins: {{ superuser_count }}
+        };
+
+        // Bar Chart
+        new Chart(document.getElementById("userBarChart"), {
+            type: "bar",
+            data: {
+                labels: ["{% trans 'Students' %}", "{% trans 'Lecturers' %}", "{% trans 'Administrators' %}"],
+                datasets: [{
+                    label: "{% trans 'Total Users' %}",
+                    data: [userCounts.students, userCounts.lecturers, userCounts.admins],
+                    backgroundColor: ["#4CAF50", "#FFA500", "#FF5733"],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Doughnut Chart
+        new Chart(document.getElementById("userDoughnutChart"), {
+            type: "doughnut",
+            data: {
+                labels: ["{% trans 'Students' %}", "{% trans 'Lecturers' %}", "{% trans 'Administrators' %}"],
+                datasets: [{
+                    data: [userCounts.students, userCounts.lecturers, userCounts.admins],
+                    backgroundColor: ["#4CAF50", "#FFA500", "#FF5733"]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
+
+{% endblock %}
