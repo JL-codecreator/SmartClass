@@ -322,7 +322,7 @@ def result_sheet_pdf_view(request, id):
 
     print("\nsettings.MEDIA_ROOT", settings.MEDIA_ROOT)
     print("\nsettings.STATICFILES_DIRS[0]", settings.STATICFILES_DIRS[0])
-    logo = settings.STATICFILES_DIRS[0] + "/img/brand.png"
+    logo = settings.STATICFILES_DIRS[0] + "/img/qculogo.webp"
     im = Image(logo, 1 * inch, 1 * inch)
     im.__setattr__("_offs_x", -200)
     im.__setattr__("_offs_y", -45)
@@ -471,7 +471,7 @@ def course_registration_form(request):
     normal.fontName = "Helvetica"
     normal.fontSize = 12
     normal.leading = 18
-    title = "<b>EZOD UNIVERSITY OF TECHNOLOGY, ADAMA</b>"  # TODO: Make this dynamic
+    title = "<b>QUEZON CITY UNIVERSITY</b>"  # TODO: Make this dynamic
     title = Paragraph(title.upper(), normal)
     Story.append(title)
     style = getSampleStyleSheet()
@@ -482,7 +482,7 @@ def course_registration_form(request):
     school.fontSize = 10
     school.leading = 18
     school_title = (
-        "<b>SCHOOL OF ELECTRICAL ENGINEERING & COMPUTING</b>"  # TODO: Make this dynamic
+        "<b>SAN BARTOLOME, NOVALICHES, QUEZON CITY</b>"  # TODO: Make this dynamic
     )
     school_title = Paragraph(school_title.upper(), school)
     Story.append(school_title)
@@ -495,7 +495,7 @@ def course_registration_form(request):
     department.fontSize = 9
     department.leading = 18
     department_title = (
-        "<b>DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING</b>"  # TODO: Make this dynamic
+        "<b>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</b>"  # TODO: Make this dynamic
     )
     department_title = Paragraph(department_title, department)
     Story.append(department_title)
@@ -721,7 +721,7 @@ def course_registration_form(request):
     has been duly registered for the <b>"
         + student.level
         + " level </b> of study in the department\
-    of COMPUTER SICENCE & ENGINEERING and that the courses and credits \
+    of BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY and that the courses and credits \
     registered are as approved by the senate of the University"
     )
     certification_text = Paragraph(certification_text, certification)
@@ -729,7 +729,7 @@ def course_registration_form(request):
 
     # FIRST SEMESTER ENDS HERE
 
-    logo = settings.STATICFILES_DIRS[0] + "/img/brand.png"
+    logo = settings.STATICFILES_DIRS[0] + "/img/qculogo.webp"
     im_logo = Image(logo, 1 * inch, 1 * inch)
     setattr(im_logo, "_offs_x", -218)
     setattr(im_logo, "_offs_y", 480)
