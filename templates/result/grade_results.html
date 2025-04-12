@@ -98,7 +98,7 @@
     {% for course in courses %}
     {% if course.course.semester == "Second" %}
     <tbody>
-      <tr>
+       <tr>
         <th>{{ forloop.counter }}</th>
         <td><a href="{{ course.course.get_absolute_url }}">{{ course.course.title }}</a></td>
         <td>{{ course.course.code }}</td>
@@ -108,9 +108,9 @@
         <td>{{ course.point }}</td>
         
         {% if course.comment == 'PASS' %}
-          <td class="success"><i class="fas fa-check-circle"></i>{% trans 'PASS' %}</td>
+          <td class="success"><i class="fas fa-check-circle" style="color: green;"></i>{% trans 'PASS' %}</td>
         {% elif course.comment == 'FAIL' %}
-          <td class="danger"><i class="fas fa-exclamation-circle"></i>{% trans 'FAIL' %}</td>
+          <td class="danger"><i class="fas fa-exclamation-circle" style="color: red;"></i>{% trans 'FAIL' %}</td>
         {% else %}
           <td></td>
         {% endif %}
