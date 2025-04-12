@@ -89,9 +89,9 @@
         <td>{{ course.attendance }}</td>
         <td>{{ course.final_exam }}</td>
         {% if course.total >= 45 %}
-        <td class="success"><i class="fas fa-check-circle"></i> {{ course.total }}</td>
+        <td class="success"><i class="fas fa-check-circle" style="color: green;"></i> {{ course.total }}</td>
         {% else %}
-        <td class="danger"><i class="fas fa-exclamation-circle"></i> {{ course.total }}</td>
+        <td class="danger"><i class="fas fa-exclamation-circle" style="color: red;"></i> {{ course.total }}</td>
         {% endif %}
       </tr>
     </tbody>
