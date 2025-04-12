@@ -54,13 +54,13 @@
                     <td>{{ course.course.semester }}</td>
                     <th>
                         {% if course.course.is_current_semester == False %}
-                        <i class="fas fa-times-circle fa-1-5x danger"></i>
+                        <i class="fas fa-times-circle fa-1-5x danger" style="color: red;"></i>
                         {% else %}
-                        <i class="fas fa-check-circle"></i>
+                        <i class="fas fa-check-circle" style="color: green;"></i>
                         {% endif %}
                     </th>
                     <td class="success">
-                        <i class="fas fa-check-circle"></i> {% trans 'Taken' %}
+                        <i class="fas fa-check-circle" style="color: blue;"></i> {% trans 'Taken' %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -97,9 +97,9 @@
                     <td>{{ course.semester }}</td>
                     <th>
                         {% if course.is_current_semester == False %}
-                        <i class="fas fa-times-circle fa-1-5x danger"></i>
+                        <i class="fas fa-times-circle fa-1-5x danger" style="color: red;"></i>
                         {% else %}
-                        <i class="fas fa-check-circle"></i>
+                        <i class="fas fa-check-circle" style="color: green;"></i>
                         {% endif %}
                     </th>
                 </tr>
