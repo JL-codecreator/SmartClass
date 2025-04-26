@@ -26,7 +26,7 @@
         <th>{% trans 'Course Code' %}</th>
         <th>{% trans 'Cr.Hr' %}</th>
         <th>{% trans 'Grade' %}</th>
-        <th>{% trans 'Points' %}</th>
+        <th>{% trans 'Grade Value' %}</th>
         <th>{% trans 'Comment' %}</th>
       </tr>
     </thead>
@@ -39,8 +39,8 @@
         <td>{{ course.course.code }}</td>
         <td>{{ course.course.credit }}</td>
 
-        <td class="{% if course.grade == 'F' %}danger{% else %}success{% endif %}">{{ course.grade }}</td>
-        <td>{{ course.point }}</td>
+        <td class="{% if course.grade == 'F' %}danger{% else %}success{% endif %}">{{ course.total }}</td>
+        <td>{{ course.grade }}</td>
 
         {% if course.comment == 'PASS' %}
           <td class="success"><i class="fas fa-check-circle"></i>{% trans 'PASS' %}</td>
@@ -90,22 +90,22 @@
         <th>{% trans 'Course Title' %}</th>
         <th>{% trans 'Course Code' %}</th>
         <th>{% trans 'Cr.Hr' %}</th>
-        <th>{% trans 'GRADE' %}</th>
-        <th>{% trans 'Points' %}</th>
+        <th>{% trans 'Grade' %}</th>
+        <th>{% trans 'Grade Value' %}</th>
         <th>{% trans 'Comment' %}</th>
       </tr>
     </thead>
     {% for course in courses %}
     {% if course.course.semester == "Second" %}
     <tbody>
-       <tr>
+      <tr>
         <th>{{ forloop.counter }}</th>
         <td><a href="{{ course.course.get_absolute_url }}">{{ course.course.title }}</a></td>
         <td>{{ course.course.code }}</td>
         <td>{{ course.course.credit }}</td>
         
-        <td class="{% if course.grade == 'F' %}danger{% else %}success{% endif %}">{{ course.grade }}</td>
-        <td>{{ course.point }}</td>
+        <td class="{% if course.grade == 'F' %}danger{% else %}success{% endif %}">{{ course.total }}</td>
+        <td>{{ course.grade }}</td>
         
         {% if course.comment == 'PASS' %}
           <td class="success"><i class="fas fa-check-circle" style="color: green;"></i>{% trans 'PASS' %}</td>
