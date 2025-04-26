@@ -1,6 +1,5 @@
 from decimal import Decimal
 from django.conf import settings
-
 from django.db import models
 from django.urls import reverse
 
@@ -8,6 +7,7 @@ from accounts.models import Student
 from core.models import Semester
 from course.models import Course
 
+# Grade Definitions
 A_PLUS = "A+"
 A = "A"
 A_MINUS = "A-"
@@ -45,81 +45,64 @@ COMMENT_CHOICES = (
 )
 
 GRADE_BOUNDARIES = [
-    (90, A_PLUS),
-    (85, A),
-    (80, A_MINUS),
-    (75, B_PLUS),
-    (70, B),
-    (65, B_MINUS),
-    (60, C_PLUS),
-    (55, C),
-    (50, C_MINUS),
-    (45, D),
-    (0, F),
+    (96, A_PLUS),
+    (94, A),
+    (91, A_MINUS),
+    (88, B_PLUS),
+    (85, B),
+    (83, B_MINUS),
+    (80, C_PLUS),
+    (78, C),
+    (75, C_MINUS),
+    (0, F),  # anything below 75 is F
 ]
 
+
 GRADE_POINT_MAPPING = {
-    A_PLUS: 4.0,
-    A: 4.0,
-    A_MINUS: 3.75,
-    B_PLUS: 3.5,
-    B: 3.0,
-    B_MINUS: 2.75,
-    C_PLUS: 2.5,
-    C: 2.0,
-    C_MINUS: 1.75,
-    D: 1.0,
-    F: 0.0,
-    NG: 0.0,
+    A_PLUS: 1.00,     # 96–100
+    A: 1.25,          # 94–95
+    A_MINUS: 1.50,    # 91–93
+    B_PLUS: 1.75,     # 88–90
+    B: 2.00,          # 85–87
+    B_MINUS: 2.25,    # 83–84
+    C_PLUS: 2.50,     # 80–82
+    C: 2.75,          # 78–79
+    C_MINUS: 3.00,    # 75–77
+    F: 5.00,          # 74 and below
+    NG: 5.00,         # No Grade
 }
+
 
 
 class TakenCourse(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="taken_courses"
-    )
-    assignment = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00")
-    )
-    mid_exam = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00")
-    )
-    quiz = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
-    attendance = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00")
-    )
-    final_exam = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00")
-    )
-    total = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00"), editable=False
-    )
-    grade = models.CharField(
-        choices=GRADE_CHOICES, max_length=2, blank=True, editable=False
-    )
-    point = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00"), editable=False
-    )
-    comment = models.CharField(
-        choices=COMMENT_CHOICES, max_length=200, blank=True, editable=False
-    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="taken_courses")
 
-    def get_absolute_url(self):
-        return reverse("course_detail", kwargs={"slug": self.course.slug})
+    assignment = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    mid_exam = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    quiz = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    attendance = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    final_exam = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
+    project = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"), editable=True)
+    total = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"), editable=False)
+    grade = models.CharField(choices=GRADE_CHOICES, max_length=2, blank=True, editable=False)
+    point = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"), editable=False)
+    comment = models.CharField(choices=COMMENT_CHOICES, max_length=200, blank=True, editable=False)
 
     def __str__(self):
         return f"{self.course.title} ({self.course.code})"
 
+    def get_absolute_url(self):
+        return reverse("course_detail", kwargs={"slug": self.course.slug})
+
     def get_total(self):
-        return sum(
-            [
-                Decimal(self.assignment),
-                Decimal(self.mid_exam),
-                Decimal(self.quiz),
-                Decimal(self.attendance),
-                Decimal(self.final_exam),
-            ]
+        return (
+            Decimal(self.assignment) * Decimal("0.10") +
+            Decimal(self.quiz) * Decimal("0.20") +
+            Decimal(self.mid_exam) * Decimal("0.10") +
+            Decimal(self.attendance) * Decimal("0.10") +
+             Decimal(self.project) * Decimal("0.20") +
+            Decimal(self.final_exam) * Decimal("0.30")
         )
 
     def get_grade(self):
@@ -130,7 +113,7 @@ class TakenCourse(models.Model):
         return NG
 
     def get_comment(self):
-        if self.grade in [F, NG]:
+        if self.total <= 74.90:
             return FAIL
         return PASS
 
