@@ -135,18 +135,25 @@ def add_score_for(request, id):
             score = data.getlist(
                 ids[s]
             )  # get list of score for current student in the loop
+
+            
+
             assignment = score[
                 0
             ]  # subscript the list to get the fisrt value > ca score
             mid_exam = score[1]  # do the same for exam score
             quiz = score[2]
             attendance = score[3]
-            final_exam = score[4]
+            project = score[4]
+            final_exam = score[5]
+
+            
             obj = TakenCourse.objects.get(pk=ids[s])  # get the current student data
             obj.assignment = assignment  # set current student assignment score
             obj.mid_exam = mid_exam  # set current student mid_exam score
             obj.quiz = quiz  # set current student quiz score
             obj.attendance = attendance  # set current student attendance score
+            obj.project = project  # set current student attendance score
             obj.final_exam = final_exam  # set current student final_exam score
 
             obj.total = obj.get_total()
@@ -482,7 +489,7 @@ def course_registration_form(request):
     school.fontSize = 10
     school.leading = 18
     school_title = (
-        "<b>SAN BARTOLOME, NOVALICHES, QUEZON CITY</b>"  # TODO: Make this dynamic
+        "<b>San Bartolome, Quezon City</b>"  # TODO: Make this dynamic
     )
     school_title = Paragraph(school_title.upper(), school)
     Story.append(school_title)
@@ -495,7 +502,7 @@ def course_registration_form(request):
     department.fontSize = 9
     department.leading = 18
     department_title = (
-        "<b>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</b>"  # TODO: Make this dynamic
+        "<b></b>"  # TODO: Make this dynamic
     )
     department_title = Paragraph(department_title, department)
     Story.append(department_title)
@@ -721,7 +728,7 @@ def course_registration_form(request):
     has been duly registered for the <b>"
         + student.level
         + " level </b> of study in the department\
-    of BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY and that the courses and credits \
+    of COMPUTER SICENCE & ENGINEERING and that the courses and credits \
     registered are as approved by the senate of the University"
     )
     certification_text = Paragraph(certification_text, certification)
@@ -729,7 +736,7 @@ def course_registration_form(request):
 
     # FIRST SEMESTER ENDS HERE
 
-    logo = settings.STATICFILES_DIRS[0] + "/img/qculogo.webp"
+    logo = settings.STATICFILES_DIRS[0] + "/img/brand.png"
     im_logo = Image(logo, 1 * inch, 1 * inch)
     setattr(im_logo, "_offs_x", -218)
     setattr(im_logo, "_offs_y", 480)
