@@ -27,7 +27,7 @@
 </div>
 
 <br>
-<h4 class="title-1">{% trans 'Students result form' %} | {{ course|truncatechars:15 }}</h4>
+<h4 class="title-1">{% trans 'Students result form' %}</h4>
 <p>{{ course.summary }}</p>
 
 {% include 'snippets/messages.html' %}
@@ -37,7 +37,7 @@
     <div class="btn-flex">
         <button title="Save Score" type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
         <a target="_blank" href="{% url 'result_sheet_pdf_view' id=course.id %}">
-            <span data-toggle="tooltip" title="Print Result sheet" class="btn btn-warning">
+            <span data-toggle="tooltip" title="Print Result sheet" class="btn btn-secondary">
                 <i class="far fa-file-pdf"></i> {% trans 'Grade report' %}
             </span>
         </a>
@@ -51,12 +51,13 @@
                     <th>#</th>
                     <th>{% trans 'Student' %}</th>
                     <th>{% trans 'Assignment' %}</th>
-                    <th>{% trans 'Mid exam' %}</th>
+                    <th>{% trans 'Class Standing' %}</th>
                     <th>{% trans 'Quiz' %}</th>
                     <th>{% trans 'Attendance' %}</th>
-                    <th>{% trans 'Final exam' %}</th>
-                    <th>{% trans 'Total' %}</th>
-                    <th>{% trans 'Point' %}</th>
+                    <th>{% trans 'Project' %}</th>
+                    <th>{% trans 'Major Exam' %}</th>
+                    
+                    
                     <th>{% trans 'Grade' %}</th>
                     <th>{% trans 'Comment' %}</th>
                 </tr>
@@ -78,13 +79,17 @@
                     <td>
                         <input id="attendance" type="number" name="{{ student.id }}" value="{{ student.attendance }}">
                     </td>
+
+                    <td>
+                        <input id="final_exam" type="number" name="{{ student.id }}" value="{{ student.project }}">
+                    </td>
                     <td>
                         <input id="final_exam" type="number" name="{{ student.id }}" value="{{ student.final_exam }}">
                     </td>
-                    <td>{{ student.total }}</td>
+                  
 
-                    <td>{{ student.point }}</td>
-                    <td class="{% if student.grade == 'F' %}text-danger{% else %}text-success{% endif %}">{{ student.grade }}</td>
+                    
+                    <td class="{% if student.grade == 'F' %}text-danger{% else %}text-dark{% endif %}">{{ student.total }}</td>
                     {% if student.comment == 'PASS' %}
                     <td class="text-success">&check; {{ student.comment }}</td>
                     {% elif student.comment == 'FAIL' %}
